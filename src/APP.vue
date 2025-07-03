@@ -31,24 +31,24 @@
       <!-- 下半部分：图表区域 -->
       <section class="flex-1 bg-[#202334] border border-blue-900/40 rounded-b-2xl p-4 flex items-center justify-center overflow-hidden relative">
         <!-- 左侧中部圆形切换按钮组 -->
-          <div class="absolute bottom-6 left-6 flex flex-col items-start space-y-4 z-10">
-       <button
-    v-for="item in chartTypes"
-    :key="item.type"
-    @click="chartType = item.type"
-    :title="item.label"
-    :class="[
-      'w-12 h-12 flex items-center justify-center rounded-full',
-      'transition-all duration-300 ease-out hover:ease-in',
-      chartType === item.type 
-        ? 'bg-gray-700 scale-110 ring-2 ring-gray-300 shadow-lg' 
-        : 'bg-gray-900 hover:bg-gray-600 shadow-md hover:shadow-lg',
-      'text-2xl text-white border border-gray-700 hover:border-gray-500'
-    ]"
-  >
-    <span>{{ item.icon }}</span>
-  </button>
-      </div>
+        <div class="absolute top-1/2 -translate-y-1/2 left-6 flex flex-col items-start space-y-4 z-10">
+          <button
+            v-for="item in chartTypes"
+            :key="item.type"
+            @click="chartType = item.type"
+            :title="item.label"
+            :class="[
+              'w-12 h-12 flex items-center justify-center rounded-full',
+              'transition-all duration-300 ease-out hover:ease-in',
+              chartType === item.type 
+                ? 'bg-gray-700 scale-110 ring-2 ring-gray-300 shadow-lg' 
+                : 'bg-gray-900 hover:bg-gray-600 shadow-md hover:shadow-lg',
+              'text-2xl text-white border border-gray-700 hover:border-gray-500'
+            ]"
+          >
+            <span>{{ item.icon }}</span>
+          </button>
+        </div>
         <div class="flex-1 flex items-center justify-center">
           <UsageChart :data="apps" :type="chartType" class="w-full h-full" />
         </div>
