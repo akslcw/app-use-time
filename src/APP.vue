@@ -71,10 +71,10 @@ const apps = [
 
 const maxMinutes = Math.max(...apps.map(a => a.minutes))
 
-const chartType = ref('line')
+const chartType = ref('bar')
 const chartTypes = [
+  { type: 'bar', label: '柱状图', icon: '📊' },
   { type: 'line', label: '折线图', icon: '📈' },
-  { type: 'pie', label: '饼图', icon: '🥧' },
-  { type: 'bar', label: '柱状图', icon: '📊' }
+  { type: 'pie', label: '饼图', icon: '🥧' }
 ]
 </script>

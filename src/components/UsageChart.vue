@@ -56,6 +56,8 @@ function initChart() {
         left: 'left',
         textStyle: { color: '#cbd5e1', fontSize: 14 }
       },
+      xAxis: { show: false },
+      yAxis: { show: false },
       series: [
         {
           name: '使用时长',
@@ -97,12 +99,14 @@ function initChart() {
         show: false
       },
       xAxis: {
+        show: true,
         type: 'category',
         data: props.data.map(item => item.name),
         axisLabel: { color: '#cbd5e1', fontWeight: 'bold', fontSize: 14 },
         axisLine: { lineStyle: { color: '#3b82f6' } }
       },
       yAxis: {
+        show: true,
         type: 'value',
         axisLabel: { color: '#cbd5e1', fontWeight: 'bold', fontSize: 14 },
         splitLine: { lineStyle: { color: '#334155' } }
