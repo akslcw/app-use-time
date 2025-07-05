@@ -1,182 +1,145 @@
-# App Usage Visualizer
+# 应用使用时长监控器
 
-## 项目简介
+一个基于 Electron + Vue 3 + ECharts 的桌面应用，用于实时监控和可视化 Windows 系统中的应用使用时长。
 
-本项目是一个基于 Vue 3 + Vite + ECharts 的应用使用时长可视化工具，支持深色主题，现代美观。
-主要功能包括应用时长卡片展示、可切换的多种图表（柱状图、折线图、饼图）、自适应布局和滚动体验。
+## ✨ 功能特性
 
----
+- 🔍 **实时进程监控**：自动检测当前活跃的 Windows 应用程序
+- 📊 **多图表展示**：支持柱状图、折线图、饼图三种可视化方式
+- 💾 **本地数据存储**：自动保存使用数据到本地 JSON 文件
+- 🎨 **现代化 UI**：采用深色主题设计，界面美观
+- ⚡ **实时更新**：每分钟自动更新使用时长数据
+- 🎯 **智能图标**：自动为常见应用分配对应图标
 
-## 已实现的功能
+## 🚀 快速开始
 
-- **应用时长总览卡片**：以卡片形式展示每个应用的使用时长、图标、进度条。
-- **图表可视化**：支持柱状图、折线图、饼图三种类型，基于 ECharts 实现，数据与卡片区同步。
-- **图表类型切换**：按钮位于图表下方，支持一键切换不同图表类型。
-- **深色主题**：全局深蓝色背景，卡片和图表风格统一，字体高对比度。
-- **自适应布局**：卡片区和图表区上下分布，比例约2:3，卡片区可滚动，适合大量应用。
-- **响应式设计**：支持桌面和移动端浏览体验。
-- **滚动条美化**：自定义滚动条样式，提升视觉体验。
+### 方法一：使用批处理文件（推荐）
 
----
+1. 双击运行 `start.bat` 文件
+2. 等待开发服务器和 Electron 应用启动
+3. 开始监控你的应用使用时长
 
-## 目录结构与文件说明
+### 方法二：手动启动
 
-```
-src/
-  ├── APP.vue              # 主界面入口，页面结构与核心逻辑
-  ├── main.js              # 应用入口，挂载 Vue 实例
-  ├── AppUsageList.vue     # 应用时长卡片列表组件
-  ├── AppUsageItem.vue     # 单个应用时长卡片组件
-  ├── components/
-  │     └── UsageChart.vue # 图表组件，封装 ECharts
-  ├── assets/
-  │     ├── main.css       # 全局样式（引入 Tailwind）
-  │     └── vue.svg        # 示例图片
-  └── style.css            # 额外样式（如有）
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 新开一个终端，启动 Electron
+npm run electron
 ```
 
-### 主要文件功能
+## 📋 系统要求
 
-- **APP.vue**  
-  页面主入口，负责整体布局、数据管理、图表类型切换、主题与滚动区分布。
+- Windows 10/11
+- Node.js 16+ 
+- npm 或 yarn
 
-- **main.js**  
-  Vue 应用入口，加载全局样式并挂载主组件。
+## 🔧 技术栈
 
-- **AppUsageList.vue**  
-  接收应用数据，遍历渲染每个应用卡片，支持自定义字体颜色。
+- **前端框架**：Vue 3 + Composition API
+- **桌面应用**：Electron
+- **图表库**：ECharts 5
+- **样式框架**：Tailwind CSS
+- **构建工具**：Vite
 
-- **AppUsageItem.vue**  
-  单个应用卡片，包含图标、应用名、进度条、时长，支持高对比度字体。
+## 📁 项目结构
 
-- **components/UsageChart.vue**  
-  图表组件，基于 ECharts，支持柱状图、折线图、饼图，自动适配数据和类型切换。
-
-- **assets/main.css**  
-  引入 TailwindCSS 基础样式。
-
----
-
-## 主要实现细节与注释
-
-### APP.vue
-
-```vue
-<script setup>
-// 页面主入口，负责整体布局和数据管理
-import { ref } from 'vue'
-import AppUsageList from './AppUsageList.vue'
-import UsageChart from './components/UsageChart.vue'
-
-// 假数据：应用名、图标、时长（字符串）、分钟数
-const apps = [
-  { name: 'Chrome', icon: '🌐', time: '3h 20min', minutes: 200 },
-  // ... 其它应用
-]
-const maxMinutes = Math.max(...apps.map(a => a.minutes))
-
-// 图表类型切换
-const chartType = ref('bar')
-const chartTypes = [
-  { label: '柱状图', value: 'bar' },
-  { label: '折线图', value: 'line' },
-  { label: '饼图', value: 'pie' }
-]
-</script>
+```
+app-use-time/
+├── electron.js          # Electron 主进程入口
+├── electron/
+│   ├── main.js         # 主进程逻辑（已集成到 electron.js）
+│   └── preload.js      # 预加载脚本
+├── src/
+│   ├── APP.vue         # 主应用组件
+│   ├── components/
+│   │   └── UsageChart.vue  # 图表组件
+│   └── main.js         # Vue 应用入口
+├── usage-data.json     # 使用数据存储文件（自动生成）
+└── start.bat          # Windows 启动脚本
 ```
 
-### AppUsageList.vue
+## 🎯 核心功能
 
-```vue
-<script setup>
-// 应用时长卡片列表，遍历渲染 AppUsageItem
-import AppUsageItem from './AppUsageItem.vue'
-const props = defineProps({
-  apps: Array,           // 应用数据数组
-  maxMinutes: Number,    // 最大分钟数（用于进度条比例）
-  cardTextClass: String  // 字体颜色类名
-})
-</script>
+### 进程监控
+- 使用 Windows `tasklist` 命令获取系统进程
+- 通过 PowerShell 检测当前活跃窗口
+- 每分钟自动更新使用时长
+
+### 数据存储
+- 按日期分类存储使用数据
+- 自动保存到 `usage-data.json` 文件
+- 应用重启后自动加载历史数据
+
+### 智能识别
+- 自动识别常见应用（Chrome、VS Code、微信等）
+- 为不同应用分配对应图标
+- 支持自定义应用图标映射
+
+## 🎨 界面特性
+
+- **深色主题**：护眼的深色配色方案
+- **响应式设计**：适配不同屏幕尺寸
+- **动画效果**：流畅的过渡动画
+- **实时状态**：监控状态指示器
+
+## 📊 图表类型
+
+1. **柱状图**：直观显示各应用使用时长对比
+2. **折线图**：展示使用时长趋势变化
+3. **饼图**：显示使用时长占比分布
+
+## 🔒 隐私说明
+
+- 所有数据仅存储在本地，不会上传到任何服务器
+- 仅监控应用名称和使用时长，不收集其他信息
+- 可随时停止监控或删除数据文件
+
+## 🛠️ 开发说明
+
+### 开发模式
+```bash
+npm run dev          # 启动 Vite 开发服务器
+npm run electron     # 启动 Electron（需要先启动 dev）
 ```
 
-### AppUsageItem.vue
-
-```vue
-<script setup>
-// 单个应用卡片，显示图标、名称、进度条、时长
-const props = defineProps({
-  name: String,          // 应用名
-  icon: String,          // 图标 emoji
-  time: String,          // 时长字符串
-  minutes: Number,       // 时长（分钟）
-  maxMinutes: Number,    // 最大分钟数
-  textClass: String      // 字体颜色类名
-})
-</script>
+### 构建生产版本
+```bash
+npm run build        # 构建 Vue 应用
+npm run electron     # 启动 Electron 应用
 ```
 
-### components/UsageChart.vue
+## 🐛 常见问题
 
-```vue
-<script setup>
-// 图表组件，支持柱状图、折线图、饼图
-import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import * as echarts from 'echarts'
-
-const chartRef = ref(null)
-let chart = null
-
-const props = defineProps({
-  data: Array,           // 图表数据
-  chartType: String      // 图表类型
-})
-
-// 初始化和切换图表
-function initChart() {
-  // ... 省略 ECharts 配置，已根据类型自动切换 option
-}
-onMounted(() => { nextTick(() => { initChart() }) })
-watch(() => [props.data, props.chartType], () => { if (chart) initChart() })
-onBeforeUnmount(() => { if (chart) { chart.dispose(); chart = null } })
-</script>
+### Q: 启动时提示 PowerShell 执行策略错误
+A: 使用 `start.bat` 文件启动，或手动设置 PowerShell 执行策略：
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-### main.js
+### Q: 监控不到某些应用
+A: 确保应用有窗口标题，某些后台进程可能无法被检测到
 
-```js
-// Vue 应用入口，加载全局样式并挂载主组件
-import { createApp } from 'vue'
-import APP from './APP.vue'
-import './assets/main.css'
+### Q: 数据不更新
+A: 检查是否点击了"开始监控"按钮，监控状态指示灯应为绿色
 
-createApp(APP).mount('#app')
-```
+## 📝 更新日志
 
----
+### v1.0.0
+- ✅ 基础进程监控功能
+- ✅ 多图表可视化
+- ✅ 本地数据存储
+- ✅ 现代化 UI 设计
+- ✅ 实时数据更新
 
-## 如何运行
+## 🤝 贡献
 
-1. 安装依赖  
-   ```bash
-   npm install
-   ```
+欢迎提交 Issue 和 Pull Request！
 
-2. 启动开发服务器  
-   ```bash
-   npm run dev
-   ```
+## �� 许可证
 
-3. 访问本地地址（通常为 http://localhost:5173）
-
----
-
-## 其它说明
-
-- 本项目采用 TailwindCSS 进行快速样式开发。
-- 图表基于 ECharts，支持多种类型切换。
-- 所有数据为假数据，实际接入可根据需要调整。
-- 代码已添加详细注释，便于二次开发和维护。
-
----
-
-如需进一步扩展功能或有其它问题，欢迎随时联系！
+MIT License
