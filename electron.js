@@ -1,3 +1,4 @@
+console.log('Electron 主进程已启动');
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('fs')
